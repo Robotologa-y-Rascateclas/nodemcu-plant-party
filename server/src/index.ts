@@ -1,6 +1,6 @@
 import express from 'express';
 import bodyParser from 'body-parser';
-import mongoose from 'mongoose';
+import mongoose, { ConnectOptions } from 'mongoose';
 
 // Define the schema for the sensor data
 interface SensorData {
@@ -32,7 +32,7 @@ const SensorModel = mongoose.model<SensorDocument>(
 mongoose.connect('mongodb://localhost:27017/sensors', {
   useNewUrlParser: true,
   useUnifiedTopology: true,
-});
+} as ConnectOptions);
 
 // Create the Express app
 const app = express();
