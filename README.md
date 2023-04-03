@@ -16,6 +16,7 @@ It will also send the data to a server and display it in a web page.
 ## How to configure and run the server
 
 * Install Docker and Docker Compose
+* Modify file `server/init-mongo.js` and change user and password there
 * Go to the server directory and run `docker-compose up -d`
 
 ## How to configure and run the NodeMCU
