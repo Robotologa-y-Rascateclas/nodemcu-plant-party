@@ -21,19 +21,7 @@ EXPOSE 3000
 
 # Set the environment variables
 ENV MONGO_URI mongodb://mongodb:27017/sensors
-ENV NODE_ENV production
+ENV NODE_ENV development
 
 # Start the Node.js server
 CMD [ "npm", "start" ]
-
-# MongoDB image
-FROM mongo:4.4
-
-# Set the environment variable for the database name
-ENV MONGO_INITDB_DATABASE sensors
-
-# Copy the initialization script
-COPY init-mongo.js /docker-entrypoint-initdb.d/
-
-# Expose port 27017 for MongoDB
-EXPOSE 27017

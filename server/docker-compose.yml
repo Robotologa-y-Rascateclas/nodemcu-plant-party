@@ -1,29 +1,25 @@
-version: '3'
+version: '3.9'
 
 services:
-  mongodb:
-    image: mongo:latest
+  mongo:
+    build:
+      context: .
+      dockerfile: Dockerfile.mongodb
     container_name: mongodb
-    environment:
-      MONGO_INITDB_DATABASE: sensors
     volumes:
-      - mongodb_data:/data/db
+        - ./data:/data/db
     ports:
-      - '27017:27017'
-
-  sensor-app:
-    build: .
-    container_name: sensor-app
-    environment:
-      MONGO_URI: mongodb://mongodb:27017/sensors
-      NODE_ENV: development
+      - "27017:27017"
+  nodejs:
+    build:
+      context: .
+      dockerfile: Dockerfile.nodejs
     volumes:
       - ./src:/app/src
     ports:
-      - '3000:3000'
+      - "3000:3000"
     depends_on:
-      - mongodb
+      - mongo
 
 volumes:
-  mongodb_data:
-    name: mongodb_data
+    mongodb-data:
