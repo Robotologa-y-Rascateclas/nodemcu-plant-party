@@ -1,0 +1,35 @@
+version: '3.9'
+
+services:
+  mongodb:
+    build:
+      context: .
+      dockerfile: Dockerfile.mongodb
+    container_name: mongodb
+    volumes:
+      - mongodb-data:/data/db
+    ports:
+      - "27017:27017"
+    networks:
+      - my-network
+    restart: unless-stopped
+  nodejs:
+    build:
+      context: .
+      dockerfile: Dockerfile.nodejs
+    volumes:
+      - ./src:/app/src
+    ports:
+      - "3000:3000"
+    networks:
+      - my-network
+    depends_on:
+      - mongodb
+    restart: unless-stopped
+
+volumes:
+  mongodb-data:
+
+networks:
+  my-network:
+    driver: bridge

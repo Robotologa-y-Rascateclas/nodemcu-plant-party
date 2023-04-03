@@ -1,0 +1,11 @@
+# MongoDB image
+FROM mongo:4.4
+
+# Set the environment variable for the database name
+ENV MONGO_INITDB_DATABASE sensors
+
+# Copy the initialization script
+COPY init-mongo.js /docker-entrypoint-initdb.d/
+
+# Expose port 27017 for MongoDB
+EXPOSE 27017
