@@ -20,8 +20,8 @@ RUN npm run build
 EXPOSE 3000
 
 # Set the environment variables
-ENV MONGO_URI mongodb://mongodb:27017/sensors
+ENV MONGO_URI mongodb://mongodb:27017/${MONGO_INITDB_DATABASE}
 ENV NODE_ENV development
 
 # Start the Node.js server
-CMD [ "npm", "start" ]
+CMD [ "npm", "run", "dev" ]

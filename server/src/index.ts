@@ -29,7 +29,7 @@ const SensorModel = mongoose.model<SensorDocument>(
 );
 
 // Connect to the MongoDB database
-mongoose.connect('mongodb://localhost:27017/sensors', {
+mongoose.connect('mongodb://mongodb:27017/sensors', {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 } as ConnectOptions);
