@@ -2,10 +2,20 @@ import express from 'express';
 import bodyParser from 'body-parser';
 import mongoose, { ConnectOptions } from 'mongoose';
 
+// function to show the sensor date on the web page as YYYY-MM-DD HH:MM:SS
+function formatDate(date: Date) {
+  const year = date.getFullYear();
+  const month = date.getMonth() + 1;
+  const day = date.getDate();
+  const hours = date.getHours();
+  const minutes = date.getMinutes();
+  const seconds = date.getSeconds();
+  return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+}
+
 // Define the schema for the sensor data
 interface SensorData {
   moisture: string;
-  temperature: string;
 }
 
 // Define the schema for the sensor
@@ -16,6 +26,7 @@ interface Sensor {
 // Define the schema for the MongoDB document
 interface SensorDocument extends mongoose.Document {
   sensor: string;
+  date: Date;
   data: Sensor;
 }
 
@@ -24,6 +35,7 @@ const SensorModel = mongoose.model<SensorDocument>(
   'Sensor',
   new mongoose.Schema({
     sensor: String,
+    date: Date,
     data: Object,
   })
 );
@@ -45,7 +57,8 @@ app.post('/send-data', async (req, res) => {
   try {
     // Save the sensor data to the database
     const { sensor, data } = req.body;
-    await SensorModel.create({ sensor, data });
+    const date = new Date();
+    await SensorModel.create({ sensor, date, data });
 
     // Send a response
     res.status(200).send('Sensor data received');
@@ -74,7 +87,7 @@ app.get('/show-data', async (req, res) => {
               <tr>
                 <th>Sensor</th>
                 <th>Moisture</th>
-                <th>Temperature</th>
+                <th>Date</th>
               </tr>
             </thead>
             <tbody>
@@ -83,7 +96,7 @@ app.get('/show-data', async (req, res) => {
                   <tr>
                     <td>${sensor.sensor}</td>
                     <td>${sensor.data.moisture}</td>
-                    <td>${sensor.data.temperature}</td>
+                    <td>${formatDate(sensor.date)}</td>
                   </tr>
                 `
               )}
