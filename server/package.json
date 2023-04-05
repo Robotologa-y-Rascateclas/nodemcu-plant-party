@@ -1,6 +1,6 @@
 {
-  "name": "server",
-  "version": "1.0.0",
+  "name": "nodemcu-plant-party",
+  "version": "0.0.1",
   "description": "",
   "main": "index.ts",
   "scripts": {
