@@ -32,3 +32,17 @@ It will also send the data to a server and display it in a web page.
 
 * Upload the code to the NodeMCU
 
+## How to use the server
+
+* Go to http://localhost:3000 to see the data
+* Go to http://localhost:3000/json to see the data in JSON format
+  * You can filter the data by adding the following parameters:
+    * `?sensor=name-of-the-sensor`
+    * `?from=2022-01-01`
+    * `?to=2022-12-31`
+    * `?limit=10`
+    * `?sort=asc`
+    * `?sort=desc`
+    * `?name=name-of-the-sensor&from=2022-01-01&to=2022-12-31&limit=10&sort=asc....`
+* To push data to the server, you can use the following command:
+  * `curl -X POST -H "Content-Type: application/json" -d '{"sensor": "sensor-name", "data": {"moisture": 22}}' http://localhost:3000/send-data`
