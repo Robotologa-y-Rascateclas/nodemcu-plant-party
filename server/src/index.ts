@@ -15,7 +15,7 @@ function formatDate(date: Date) {
 
 // Define the schema for the sensor data
 interface SensorData {
-  moisture: string;
+  moisture: number;
 }
 
 // Define the schema for the sensor
@@ -69,7 +69,7 @@ app.post('/send-data', async (req, res) => {
 });
 
 // Define the route to display sensor data
-app.get('/show-data', async (req, res) => {
+app.get('/', async (req, res) => {
   try {
     // Get all the sensor data from the database
     const sensorData = await SensorModel.find();
@@ -106,6 +106,55 @@ app.get('/show-data', async (req, res) => {
       </html>
     `;
     res.status(200).send(html);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Error displaying sensor data');
+  }
+});
+
+// Define the route to display sensor data as JSON
+app.get('/json', async (req, res) => {
+  try {
+    const { sensor, from, to, sort, limit } = req.query;
+    const filters = {};
+
+    // Add the sensor filter if it exists
+    if (sensor) {
+      filters.sensor = sensor;
+    }
+
+    // If 'from' is provided, add it to the filters
+    if (from) {
+      filters.timestamp = { $gte: new Date(from) };
+    }
+
+    // If 'to' is provided, add it to the filters
+    if (to) {
+      filters.timestamp = { ...filters.timestamp, $lte: new Date(to) };
+    }
+
+    let sortParam = '-date';
+    // If 'sort' is provided, add it to the filters
+    if (sort) {
+      sortParam = sort;
+    }
+
+    let limitParam = 0;
+    // If 'limit' is provided, add it to the filters
+    if (limit) {
+      limitParam = parseInt(limit);
+    }
+
+    const projection = { _id: 0, __v: 0 };
+
+    // Get all the sensor data from the database
+    const sensorData = await SensorModel
+      .find(filters, projection)
+      .sort(sortParam)
+      .limit(limitParam);
+
+    // Send the sensor data as JSON
+    res.status(200).json(sensorData);
   } catch (err) {
     console.error(err);
     res.status(500).send('Error displaying sensor data');
