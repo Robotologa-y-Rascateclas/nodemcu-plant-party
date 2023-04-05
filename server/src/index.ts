@@ -115,8 +115,14 @@ app.get('/', async (req, res) => {
 // Define the route to display sensor data as JSON
 app.get('/json', async (req, res) => {
   try {
-    const { sensor, from, to, sort, limit } = req.query;
-    const filters = {};
+    const { sensor, from, to, sort, limit } = req.query as {
+      sensor?: string;
+      from?: string;
+      to?: string;
+      sort?: string;
+      limit?: string;
+    };
+    const filters = {} as any;
 
     // Add the sensor filter if it exists
     if (sensor) {
