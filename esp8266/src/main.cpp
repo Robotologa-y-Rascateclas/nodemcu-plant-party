@@ -1,7 +1,10 @@
 #include <Arduino.h>
 #include <ESP8266WiFi.h>
-#include <config.h>
 #include <net.h>
+#include <ArduinoJson.h>
+
+// Load config variables
+#include <config.h>
 
 void setup() {
 
@@ -11,6 +14,9 @@ void setup() {
 
   // Connect to Wi-Fi
   initWifi();
+
+  // Init bot
+  bot_setup();
 
   // Init pins
   pinMode(SENSOR_PIN, INPUT);
@@ -22,10 +28,21 @@ void loop() {
   int sensorValue = analogRead(SENSOR_PIN);
   Serial.println(sensorValue);
 
+  // float moisture = map(sensorValue, 1023, 0, 0, 100) / 100.0;
+
+  StaticJsonDocument<200> doc;
+  doc["sensor"] = "sensor_poc";
+  JsonObject data = doc.createNestedObject("data");
+  data["moisture"] = sensorValue;
+
+  String payload;
+  serializeJson(doc, payload);
+
   // Send sensor data to server by WiFi
-  // .....
-  // .....
+  sendSensorData(payload);
+
+  sendBotMessage(sensorValue);
 
   // Wait for some time before sending the next data
-  delay(5000);
+  delay(DELAY_MEASURE_TIME);
 }

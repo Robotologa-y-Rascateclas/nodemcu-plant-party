@@ -1,7 +1,3 @@
-const char* WIFI_SSID = "your_SSID";
-const char* WIFI_PASSWORD = "your_PASSWORD";
-const char* SERVER_URL = "http://your_server_ip:3000/send-data";
-
 // Capacitive Soil Moisture Sensor v1.2
 
 // Sensor values -------------------
@@ -17,3 +13,6 @@ const int WET = 820; // Este valor se considerará 100% humedad
 const int SENSOR_PIN = A0;
 
 const int RELAY_PIN = 3;
+
+// Wait 10 minutes between measures and send data
+const int DELAY_MEASURE_TIME = 600000;
