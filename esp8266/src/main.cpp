@@ -37,10 +37,24 @@ void getTime() {
   Serial.println(timeStr);
 }
 
+/**
+ * Get the average of 5 measurements from a sensor
+ */
+int getSensorValue(int sensorPin) {
+  int sensorValue = 0;
+  for (int i = 0; i < 5; i++) {
+    sensorValue += analogRead(sensorPin);
+    delay(500);
+  }
+
+  sensorValue = sensorValue / 5;
+  Serial.println(sensorValue);
+  return sensorValue;
+}
+
 void loop() {
   // Read the moisture level from the sensor
-  int sensorValue = analogRead(SENSOR_PIN);
-  Serial.println(sensorValue);
+  int sensorValue = getSensorValue(SENSOR_PIN);
 
   // float moisture = map(sensorValue, 1023, 0, 0, 100) / 100.0;
 
