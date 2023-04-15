@@ -22,13 +22,17 @@ It will also send the data to a server and display it in a web page.
 ## How to configure and run the NodeMCU
 
 * Modify under esp8266/config.h the following values:
-  * WIFI_SSID
-  * WIFI_PASSWORD
-  * SERVER_URL
   * DRY
   * WET
   * SENSOR_PIN
   * RELAY_PIN
+
+* Modify under esp8266/configNet.h the following values:
+  * WIFI_SSID
+  * WIFI_PASSWORD
+  * SERVER_URL
+  * BOT_TOKEN
+  * CHAT_ID
 
 * Upload the code to the NodeMCU
 
