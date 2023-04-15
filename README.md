@@ -11,6 +11,7 @@ It will also send the data to a server and display it in a web page.
 
 * NodeMCU
 * Capacity Soil Moisture Sensor v1.2
+* Battery (not a powerbank, they usually poweroff and can't work with DeepSleep)
 * rPi
 
 ## How to configure and run the server
@@ -26,6 +27,8 @@ It will also send the data to a server and display it in a web page.
   * WET
   * SENSOR_PIN
   * RELAY_PIN
+  * DELAY_MEASURE_TIME
+  * DELAY_DEEPSLEEP_TIME
 
 * Modify under esp8266/configNet.h the following values:
   * WIFI_SSID

@@ -16,3 +16,7 @@ const int RELAY_PIN = 3;
 
 // Wait 10 minutes between measures and send data
 const int DELAY_MEASURE_TIME = 600000;
+
+// Time to deepSleep (max 71 minutes, 4260e6)
+// 3600e6 = 1h | 600e6 = 10min | 300e6 = 5min | 60e6 = 1min
+const int DELAY_DEEPSLEEP_TIME = 1800e6;

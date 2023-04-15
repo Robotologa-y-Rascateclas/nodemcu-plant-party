@@ -57,8 +57,11 @@ void loop() {
 
   sendBotMessage(sensorValue);
 
-  // getTime();
+  // We will use getTime() to get the time from the NTP server
+  // and only use the reles if the time is during the night
+
+  ESP.deepSleep(DELAY_DEEPSLEEP_TIME);
 
   // Wait for some time before sending the next data
-  delay(DELAY_MEASURE_TIME);
+  // delay(DELAY_MEASURE_TIME);
 }
