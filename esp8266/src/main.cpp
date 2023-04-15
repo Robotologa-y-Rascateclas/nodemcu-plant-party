@@ -1,7 +1,6 @@
 #include <Arduino.h>
-#include <ESP8266WiFi.h>
-#include <net.h>
 #include <ArduinoJson.h>
+#include <net.h>
 
 // Load config variables
 #include <config.h>
@@ -23,6 +22,21 @@ void setup() {
 
 }
 
+void getTime() {
+  time_t now = time(nullptr);
+  struct tm timeinfo;
+  gmtime_r(&now, &timeinfo);
+  timeinfo.tm_hour += 2; // adjust for Madrid time (UTC+2)
+  mktime(&timeinfo);
+
+  // Format time string
+  char timeStr[6];
+  strftime(timeStr, sizeof(timeStr), "%H:%M", &timeinfo);
+
+  // Print time string
+  Serial.println(timeStr);
+}
+
 void loop() {
   // Read the moisture level from the sensor
   int sensorValue = analogRead(SENSOR_PIN);
@@ -42,6 +56,8 @@ void loop() {
   sendSensorData(payload);
 
   sendBotMessage(sensorValue);
+
+  // getTime();
 
   // Wait for some time before sending the next data
   delay(DELAY_MEASURE_TIME);

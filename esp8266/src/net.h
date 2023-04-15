@@ -2,6 +2,7 @@
 #include <WiFiClientSecure.h>
 #include <ESP8266HTTPClient.h>
 #include <UniversalTelegramBot.h>
+#include <time.h>
 
 // Load config variables
 #include <configNet.h>
@@ -15,7 +16,7 @@ UniversalTelegramBot bot(BOT_TOKEN, secured_client);
 
 void initWifi() {
   // attempt to connect to Wifi network:
-  configTime(0, 0, "pool.ntp.org");      // get UTC time via NTP
+  configTime(1 * 3600, 0, "pool.ntp.org");      // get UTC time via NTP
   secured_client.setTrustAnchors(&cert); // Add root certificate for api.telegram.org
   Serial.print("Connecting to Wifi SSID ");
   Serial.print(WIFI_SSID);
@@ -26,6 +27,10 @@ void initWifi() {
   }
   Serial.print("\nWiFi connected. IP address: ");
   Serial.println(WiFi.localIP());
+  while (!time(nullptr)) {
+    delay(1000);
+    Serial.println("Waiting for time synchronization...");
+  }
 }
 
 void reconnectWifi() {
@@ -36,6 +41,10 @@ void reconnectWifi() {
     delay(500);
   }
   Serial.println("\nConnected");
+  while (!time(nullptr)) {
+    delay(1000);
+    Serial.println("Waiting for time synchronization...");
+  }
 }
 
 void bot_setup() {
@@ -68,9 +77,6 @@ void sendSensorData(String payload) {
   }
 
   http.end();
-
-  // Wait for some time before sending the next data
-  delay(5000);
 }
 
 void sendBotMessage(int sensorValue) {
