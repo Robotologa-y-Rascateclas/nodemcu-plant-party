@@ -98,6 +98,9 @@ app.get('/', async (req, res) => {
         <head>
           <title>Plant Party</title>
           <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+          <script src="https://code.jquery.com/jquery-3.6.4.slim.min.js"></script>
+          <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.css" />
+          <script src="//cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
         </head>
         <body>
           <h1>¡Plant Party Sensor Data!</h1>
@@ -158,7 +161,7 @@ app.get('/', async (req, res) => {
             Plotly.newPlot('graph', data, layout);
           </script>
           <h2>Table</h2>
-          <table>
+          <table id="sensorTable">
             <thead>
               <tr>
                 <th>Sensor</th>
@@ -178,6 +181,11 @@ app.get('/', async (req, res) => {
               )}
             </tbody>
           </table>
+          <script>
+            $(document).ready(function() {
+              $('#sensorTable').DataTable();
+            });
+          </script>
         </body>
       </html>
     `;
