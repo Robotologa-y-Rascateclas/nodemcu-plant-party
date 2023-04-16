@@ -85,7 +85,9 @@ app.get('/', async (req, res) => {
 
     // Add the sensor data to the arrays
     sensorData.forEach((sensor) => {
-      moistureData.push(sensor.data.moisture);
+      sensor.data.moisture > 550 ?
+        moistureData.push(sensor.data.moisture) :
+        moistureData.push(550);
       wateredData.push(sensor.data.watered);
       dateData.push(formatDate(sensor.date));
     });
