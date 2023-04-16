@@ -94,11 +94,11 @@ app.get('/', async (req, res) => {
     const html = `
       <html>
         <head>
-          <title>Sensor Data</title>
+          <title>Plant Party</title>
           <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
         </head>
         <body>
-          <h1>Sensor Data</h1>
+          <h1>¡Plant Party Sensor Data!</h1>
           <h2>Graph</h2>
           <div id="graph"></div>
           <script>
