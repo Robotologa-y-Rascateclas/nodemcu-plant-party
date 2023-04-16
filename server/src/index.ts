@@ -15,7 +15,8 @@ function formatDate(date: Date) {
 
 // Define the schema for the sensor data
 interface SensorData {
-  moisture: number;
+  moisture?: number;
+  watered?: number;
 }
 
 // Define the schema for the sensor
@@ -76,11 +77,13 @@ app.get('/', async (req, res) => {
 
     // Create arrays to hold the sensor data
     const moistureData = [] as SensorData[];
+    const wateredData = [] as SensorData[];
     const dateData = [] as string[];
 
     // Add the sensor data to the arrays
     sensorData.forEach((sensor) => {
       moistureData.push(sensor.data.moisture);
+      wateredData.push(sensor.data.watered);
       dateData.push(formatDate(sensor.date));
     });
 
@@ -97,24 +100,43 @@ app.get('/', async (req, res) => {
           <div id="graph"></div>
           <script>
             var moistureData = ${JSON.stringify(moistureData)};
+            var wateredData = ${JSON.stringify(wateredData)};
             var dateData = ${JSON.stringify(dateData)};
 
-            var trace1 = {
+            var moisture = {
               x: dateData,
               y: moistureData,
-              type: 'scatter'
+              mode: 'lines+markers',
+              type: 'scatter',
+              name: 'Moisture'
             };
 
-            var data = [trace1];
+            var watering = {
+                x: dateData,
+                y: wateredData,
+                mode: 'markers',
+                type: 'scatter',
+                name: 'Watered'
+              };
+
+            var data = [moisture, watering];
 
             var layout = {
-              title: 'Moisture Data',
-              xaxis: {
-                title: 'Date'
-              },
-              yaxis: {
-                title: 'Moisture Level'
-              }
+              shapes: [
+                {
+                  type: 'line',
+                  xref: 'paper',
+                  x0: 0,
+                  y0: 680.0,
+                  x1: 1,
+                  y1: 680.0,
+                  line:{
+                    color: 'rgb(255, 150, 150)',
+                    width: 1,
+                    dash:'dot'
+                  }
+                }
+              ]
             };
 
             Plotly.newPlot('graph', data, layout);
