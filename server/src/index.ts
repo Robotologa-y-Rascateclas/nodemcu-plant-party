@@ -169,17 +169,11 @@ app.get('/', async (req, res) => {
                 <th>Date</th>
               </tr>
             </thead>
-            <tbody>
-              ${sensorData.map(
-                (sensor) => `
-                  <tr>
-                    <td>${sensor.sensor}</td>
-                    <td>${sensor.data.moisture ? sensor.data.moisture : 'WATERING'}</td>
-                    <td>${formatDate(sensor.date)}</td>
-                  </tr>
-                `
-              )}
-            </tbody>
+            <tbody>${sensorData.map((sensor) => ` <tr>
+                <td>${sensor.sensor}</td>
+                <td>${sensor.data.moisture ? sensor.data.moisture : 'WATERING'}</td>
+                <td>${formatDate(sensor.date)}</td>
+              </tr>`).join('')} </tbody>
           </table>
           <script>
             $(document).ready(function() {
