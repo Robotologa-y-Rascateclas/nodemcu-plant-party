@@ -6,7 +6,7 @@ import mongoose, { ConnectOptions } from 'mongoose';
 function formatDate(date: Date) {
   const year = date.getFullYear();
   const month = date.getMonth() + 1;
-  const day = date.getDate();
+  const day = date.getDate() < 10 ? `0${date.getDate()}` : date.getDate();
   const hours = date.getHours();
   const minutes = date.getMinutes();
   const seconds = date.getSeconds();
@@ -74,14 +74,52 @@ app.get('/', async (req, res) => {
     // Get all the sensor data from the database
     const sensorData = await SensorModel.find();
 
+    // Create arrays to hold the sensor data
+    const moistureData = [] as SensorData[];
+    const dateData = [] as string[];
+
+    // Add the sensor data to the arrays
+    sensorData.forEach((sensor) => {
+      moistureData.push(sensor.data.moisture);
+      dateData.push(formatDate(sensor.date));
+    });
+
     // Display the sensor data on a webpage
     const html = `
       <html>
         <head>
           <title>Sensor Data</title>
+          <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
         </head>
         <body>
           <h1>Sensor Data</h1>
+          <h2>Graph</h2>
+          <div id="graph"></div>
+          <script>
+            var moistureData = ${JSON.stringify(moistureData)};
+            var dateData = ${JSON.stringify(dateData)};
+
+            var trace1 = {
+              x: dateData,
+              y: moistureData,
+              type: 'scatter'
+            };
+
+            var data = [trace1];
+
+            var layout = {
+              title: 'Moisture Data',
+              xaxis: {
+                title: 'Date'
+              },
+              yaxis: {
+                title: 'Moisture Level'
+              }
+            };
+
+            Plotly.newPlot('graph', data, layout);
+          </script>
+          <h2>Table</h2>
           <table>
             <thead>
               <tr>
