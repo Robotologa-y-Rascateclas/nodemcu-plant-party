@@ -7,5 +7,8 @@ ENV MONGO_INITDB_DATABASE sensors
 # Copy the initialization script
 COPY init-mongo.js /docker-entrypoint-initdb.d/
 
+# Set timezone to Europe/Madrid
+RUN ln -snf /usr/share/zoneinfo/Europe/Madrid /etc/localtime && echo Europe/Madrid > /etc/timezone
+
 # Expose port 27017 for MongoDB
 EXPOSE 27017
