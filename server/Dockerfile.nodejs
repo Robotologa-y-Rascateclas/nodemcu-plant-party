@@ -24,7 +24,8 @@ ENV MONGO_URI mongodb://mongodb:27017/${MONGO_INITDB_DATABASE}
 ENV NODE_ENV development
 
 # Set timezone to Europe/Madrid
-RUN ln -snf /usr/share/zoneinfo/Europe/Madrid /etc/localtime && echo Europe/Madrid > /etc/timezone
+ENV TZ=Europe/Madrid
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && dpkg-reconfigure -f noninteractive tzdata
 
 # Start the Node.js server
 CMD [ "npm", "run", "dev" ]
