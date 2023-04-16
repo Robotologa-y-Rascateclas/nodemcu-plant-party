@@ -76,7 +76,7 @@ app.post('/send-data', async (req, res) => {
 app.get('/', async (req, res) => {
   try {
     // Get all the sensor data from the database
-    const sensorData = await SensorModel.find();
+    const sensorData = await SensorModel.find().sort('-date');
 
     // Create arrays to hold the sensor data
     const moistureData = [] as SensorData[];
