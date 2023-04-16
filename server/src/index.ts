@@ -4,12 +4,15 @@ import mongoose, { ConnectOptions } from 'mongoose';
 
 // function to show the sensor date on the web page as YYYY-MM-DD HH:MM:SS
 function formatDate(date: Date) {
-  const year = date.getFullYear();
-  const month = date.getMonth() + 1 < 10 ? `0${date.getMonth() + 1}` : date.getMonth() + 1;
-  const day = date.getDate() < 10 ? `0${date.getDate()}` : date.getDate();
-  const hours = date.getHours() < 10 ? `0${date.getHours()}` : date.getHours();
-  const minutes = date.getMinutes() < 10 ? `0${date.getMinutes()}` : date.getMinutes();
-  const seconds = date.getSeconds() < 10 ? `0${date.getSeconds()}` : date.getSeconds();
+  // increase 2 hours to the date
+  let auxDate = new Date(date);
+  auxDate.setHours(auxDate.getHours() + 2);
+  const year = auxDate.getFullYear();
+  const month = auxDate.getMonth() + 1 < 10 ? `0${auxDate.getMonth() + 1}` : auxDate.getMonth() + 1;
+  const day = auxDate.getDate() < 10 ? `0${auxDate.getDate()}` : auxDate.getDate();
+  const hours = auxDate.getHours() < 10 ? `0${auxDate.getHours()}` : auxDate.getHours();
+  const minutes = auxDate.getMinutes() < 10 ? `0${auxDate.getMinutes()}` : auxDate.getMinutes();
+  const seconds = auxDate.getSeconds() < 10 ? `0${auxDate.getSeconds()}` : auxDate.getSeconds();
   return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
 }
 
