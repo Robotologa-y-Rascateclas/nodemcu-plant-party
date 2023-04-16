@@ -120,7 +120,11 @@ app.get('/', async (req, res) => {
                 y: wateredData,
                 mode: 'markers',
                 type: 'scatter',
-                name: 'Watered'
+                name: 'Watered',
+                marker: {
+                  size: 10,
+                  symbol: 'star'
+                }
               };
 
             var data = [moisture, watering];
