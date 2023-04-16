@@ -112,6 +112,9 @@ app.get('/', async (req, res) => {
               line: {
                 width: 1,
                 dash: 'dashdot'
+              },
+              marker: {
+                size: 4
               }
             };
 
