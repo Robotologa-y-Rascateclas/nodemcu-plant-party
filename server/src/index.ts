@@ -108,7 +108,11 @@ app.get('/', async (req, res) => {
               y: moistureData,
               mode: 'lines+markers',
               type: 'scatter',
-              name: 'Moisture'
+              name: 'Moisture',
+              line: {
+                width: 1,
+                dash: 'dashdot'
+              }
             };
 
             var watering = {
