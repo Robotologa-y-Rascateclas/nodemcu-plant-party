@@ -101,6 +101,40 @@ app.get('/', async (req, res) => {
           <script src="https://code.jquery.com/jquery-3.6.4.slim.min.js"></script>
           <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.css" />
           <script src="//cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+          <style>
+            body {
+              background-color: #effaed;
+              background-image: url("https://www.transparenttextures.com/patterns/asfalt-dark.png");
+              font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+              color: #444;
+            }
+            h1, h2 {
+              color: #1B5E20;
+              text-align: center;
+              text-shadow: 1px 1px #9CCC65;
+            }
+            table {
+              margin: auto;
+              border-collapse: collapse;
+              box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+              font-size: 1rem;
+            }
+            th, td {
+              padding: 0.5rem;
+              border: 1px solid #ddd;
+            }
+            th {
+              background-color: #1B5E20;
+              color: #fff;
+              text-align: left;
+            }
+            tr:nth-child(even) {
+              background-color: #f2f2f2;
+            }
+            tr:hover {
+              background-color: #f5f5f5;
+            }
+          </style>
         </head>
         <body>
           <h1>¡Plant Party Sensor Data!</h1>
@@ -155,7 +189,8 @@ app.get('/', async (req, res) => {
                     dash:'dot'
                   }
                 }
-              ]
+              ],
+              paper_bgcolor: 'rgba(0,0,0,0)'
             };
 
             Plotly.newPlot('graph', data, layout);
