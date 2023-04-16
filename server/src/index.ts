@@ -166,7 +166,7 @@ app.get('/', async (req, res) => {
                 (sensor) => `
                   <tr>
                     <td>${sensor.sensor}</td>
-                    <td>${sensor.data.moisture}</td>
+                    <td>${sensor.data.moisture ? sensor.data.moisture : 'WATERING'}</td>
                     <td>${formatDate(sensor.date)}</td>
                   </tr>
                 `
