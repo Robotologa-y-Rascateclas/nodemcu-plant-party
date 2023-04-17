@@ -1,6 +1,9 @@
 import express from 'express';
 import bodyParser from 'body-parser';
 import mongoose, { ConnectOptions } from 'mongoose';
+import bot from './telegramBot';
+
+bot;
 
 // function to show the sensor date on the web page as YYYY-MM-DD HH:MM:SS
 function formatDate(date: Date) {
@@ -44,6 +47,40 @@ const SensorModel = mongoose.model<SensorDocument>(
   })
 );
 
+interface EventData {
+  eventType: string;
+  comment: string;
+  createdAt: Date;
+}
+
+interface Event {
+  [key: string]: EventData;
+}
+
+interface EventDocument extends mongoose.Document {
+  eventType: string;
+  comment: string;
+  createdAt: Date;
+}
+
+const eventSchema = new mongoose.Schema({
+  eventType: {
+    type: String,
+    required: true,
+    enum: ['water', 'battery', 'deepSleepTime'],
+  },
+  comment: {
+    type: String,
+    required: true,
+  },
+  createdAt: {
+    type: Date,
+    default: Date.now,
+  },
+})
+
+const EventModel = mongoose.model<EventDocument>('Event', eventSchema);
+
 // Connect to the MongoDB database
 mongoose.connect('mongodb://mongodb:27017/sensors', {
   useNewUrlParser: true,
@@ -72,23 +109,43 @@ app.post('/send-data', async (req, res) => {
   }
 });
 
+// Define the route to receive event data
+app.post('/send-event', async (req, res) => {
+  try {
+    const { eventType, comment } = req.body;
+    if (!eventType || !comment) {
+      return res.status(400).send('Missing required fields');
+    }
+    await EventModel.create({ eventType, comment });
+
+    // Send a response
+    res.status(200).send('Event saved successfully');
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Error saving event');
+  }
+});
+
 // Define the route to display sensor data
 app.get('/', async (req, res) => {
   try {
     // Get all the sensor data from the database
     const sensorData = await SensorModel.find().sort('-date');
 
+    // Get all events data from the database
+    const eventData = await EventModel.find().sort('-createdAt');
+
     // Create arrays to hold the sensor data
-    const moistureData = [] as SensorData[];
-    const wateredData = [] as SensorData[];
+    const moistureData = [] as number[];
+    const wateredData = [] as number[];
     const dateData = [] as string[];
 
     // Add the sensor data to the arrays
     sensorData.forEach((sensor) => {
-      sensor.data.moisture > 550 ?
-        moistureData.push(sensor.data.moisture) :
+      sensor.data.moisture as number > 550 ?
+        moistureData.push(sensor.data.moisture as number) :
         moistureData.push(550);
-      wateredData.push(sensor.data.watered);
+      wateredData.push(sensor.data.watered as number);
       dateData.push(formatDate(sensor.date));
     });
 
@@ -100,6 +157,8 @@ app.get('/', async (req, res) => {
           <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
           <script src="https://code.jquery.com/jquery-3.6.4.slim.min.js"></script>
           <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.css" />
+          <!-- Font Awesome CDN -->
+          <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
           <script src="//cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
           <style>
             body {
@@ -210,9 +269,24 @@ app.get('/', async (req, res) => {
                 <td>${formatDate(sensor.date)}</td>
               </tr>`).join('')} </tbody>
           </table>
+          <table id="eventsTable">
+            <thead>
+              <tr>
+                <th></th>
+                <th>Comment</th>
+                <th>Date</th>
+              </tr>
+            </thead>
+            <tbody>${eventData.map((event) => ` <tr>
+                <td>${event.eventType === 'water' ? '<i class="fas fa-tint"></i>' : event.eventType === 'battery' ? '<i class="fas fa-battery-full"></i>' : '<i class="fas fa-laptop"></i>'}</td>
+                <td>${event.comment}</td>
+                <td>${formatDate(event.createdAt)}</td>
+              </tr>`).join('')} </tbody>
+          </table>
           <script>
             $(document).ready(function() {
               $('#sensorTable').DataTable();
+              $('#eventsTable').DataTable();
             });
           </script>
         </body>
