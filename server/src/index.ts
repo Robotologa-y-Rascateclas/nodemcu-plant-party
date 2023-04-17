@@ -1,7 +1,9 @@
 import express from 'express';
 import bodyParser from 'body-parser';
 import mongoose, { ConnectOptions } from 'mongoose';
-import { bot } from './telegramBot';
+import bot from './telegramBot';
+
+bot;
 
 // function to show the sensor date on the web page as YYYY-MM-DD HH:MM:SS
 function formatDate(date: Date) {

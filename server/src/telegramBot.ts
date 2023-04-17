@@ -4,11 +4,12 @@ import { config } from 'dotenv';
 
 config();
 
-const TELEGRAM_BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN;
+const TELEGRAM_BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN as string;
 const SERVER_URL = process.env.SERVER_URL;
 
-export const bot = new TelegramBot(process.env.TELEGRAM_BOT_TOKEN as string);
+const bot = new TelegramBot(TELEGRAM_BOT_TOKEN, { polling: true });
 
+console.log('Telegram bot started');
 
 bot.on('message', (msg: Message) => {
   const chatId = msg.chat.id;
@@ -22,41 +23,37 @@ bot.on('message', (msg: Message) => {
   // Send the keyboard to the user
   bot.sendMessage(chatId, 'Choose an option:', { reply_markup: { keyboard, resize_keyboard: true } });
 
-  // Listen for button presses
-  bot.on('message', (msg: Message) => {
-    if (msg.text === 'Watering') {
-      // Send an event to the server when the "Watering" button is pressed
-      axios.post(`${SERVER_URL}/send-event`, {
-        eventType: 'water',
-        comment: 'Watering event triggered from Telegram Bot'
-      });
-    } else if (msg.text === 'Changing battery') {
-      // Send an event to the server when the "Changing battery" button is pressed
-      axios.post(`${SERVER_URL}/send-event`, {
-        eventType: 'battery',
-        comment: 'Battery change event triggered from Telegram Bot'
-      });
-    } else if (msg.text === 'DeepSleep 10min') {
-      // Send an event to the server when the "DeepSleep 10min" button is pressed
-      axios.post(`${SERVER_URL}/send-event`, {
-        eventType: 'deepSleep',
-        duration: 10,
-        comment: 'Deep sleep event (10 min) triggered from Telegram Bot'
-      });
-    } else if (msg.text === 'DeepSleep 30min') {
-      // Send an event to the server when the "DeepSleep 30min" button is pressed
-      axios.post(`${SERVER_URL}/send-event`, {
-        eventType: 'deepSleep',
-        duration: 30,
-        comment: 'Deep sleep event (30 min) triggered from Telegram Bot'
-      });
-    } else if (msg.text === 'DeepSleep 60min') {
-      // Send an event to the server when the "DeepSleep 60min" button is pressed
-      axios.post(`${SERVER_URL}/send-event`, {
-        eventType: 'deepSleep',
-        duration: 60,
-        comment: 'Deep sleep event (60 min) triggered from Telegram Bot'
-      });
-    }
-  });
+  if (msg.text === 'Watering') {
+    // Send an event to the server when the "Watering" button is pressed
+    axios.post(`${SERVER_URL}/send-event`, {
+      eventType: 'water',
+      comment: 'Watering event triggered from Telegram Bot'
+    });
+  } else if (msg.text === 'Changing battery') {
+    // Send an event to the server when the "Changing battery" button is pressed
+    axios.post(`${SERVER_URL}/send-event`, {
+      eventType: 'battery',
+      comment: 'Battery change event triggered from Telegram Bot'
+    });
+  } else if (msg.text === 'DeepSleep 10min') {
+    // Send an event to the server when the "DeepSleep 10min" button is pressed
+    axios.post(`${SERVER_URL}/send-event`, {
+      eventType: 'deepSleep',
+      comment: 'Deep sleep event (10 min) triggered from Telegram Bot'
+    });
+  } else if (msg.text === 'DeepSleep 30min') {
+    // Send an event to the server when the "DeepSleep 30min" button is pressed
+    axios.post(`${SERVER_URL}/send-event`, {
+      eventType: 'deepSleep',
+      comment: 'Deep sleep event (30 min) triggered from Telegram Bot'
+    });
+  } else if (msg.text === 'DeepSleep 60min') {
+    // Send an event to the server when the "DeepSleep 60min" button is pressed
+    axios.post(`${SERVER_URL}/send-event`, {
+      eventType: 'deepSleep',
+      comment: 'Deep sleep event (60 min) triggered from Telegram Bot'
+    });
+  }
 });
+
+export default bot;
