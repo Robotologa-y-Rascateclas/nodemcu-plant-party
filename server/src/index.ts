@@ -254,7 +254,7 @@ app.get('/', async (req, res) => {
 
             Plotly.newPlot('graph', data, layout);
           </script>
-          <h2>Table</h2>
+          <h2>Sensors table</h2>
           <table id="sensorTable">
             <thead>
               <tr>
@@ -269,6 +269,7 @@ app.get('/', async (req, res) => {
                 <td>${formatDate(sensor.date)}</td>
               </tr>`).join('')} </tbody>
           </table>
+          <h2>Events table</h2>
           <table id="eventsTable">
             <thead>
               <tr>
