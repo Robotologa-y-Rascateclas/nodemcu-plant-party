@@ -1,6 +1,7 @@
 import express from 'express';
 import bodyParser from 'body-parser';
 import mongoose, { ConnectOptions } from 'mongoose';
+import { bot } from './telegramBot';
 
 // function to show the sensor date on the web page as YYYY-MM-DD HH:MM:SS
 function formatDate(date: Date) {
@@ -44,6 +45,40 @@ const SensorModel = mongoose.model<SensorDocument>(
   })
 );
 
+interface EventData {
+  eventType: string;
+  comment: string;
+  createdAt: Date;
+}
+
+interface Event {
+  [key: string]: EventData;
+}
+
+interface EventDocument extends mongoose.Document {
+  eventType: string;
+  comment: string;
+  createdAt: Date;
+}
+
+const eventSchema = new mongoose.Schema({
+  eventType: {
+    type: String,
+    required: true,
+    enum: ['water', 'battery', 'deepSleepTime'],
+  },
+  comment: {
+    type: String,
+    required: true,
+  },
+  createdAt: {
+    type: Date,
+    default: Date.now,
+  },
+})
+
+const EventModel = mongoose.model<EventDocument>('Event', eventSchema);
+
 // Connect to the MongoDB database
 mongoose.connect('mongodb://mongodb:27017/sensors', {
   useNewUrlParser: true,
@@ -72,6 +107,23 @@ app.post('/send-data', async (req, res) => {
   }
 });
 
+// Define the route to receive event data
+app.post('/send-event', async (req, res) => {
+  try {
+    const { eventType, comment } = req.body;
+    if (!eventType || !comment) {
+      return res.status(400).send('Missing required fields');
+    }
+    await EventModel.create({ eventType, comment });
+
+    // Send a response
+    res.status(200).send('Event saved successfully');
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Error saving event');
+  }
+});
+
 // Define the route to display sensor data
 app.get('/', async (req, res) => {
   try {
@@ -79,16 +131,16 @@ app.get('/', async (req, res) => {
     const sensorData = await SensorModel.find().sort('-date');
 
     // Create arrays to hold the sensor data
-    const moistureData = [] as SensorData[];
-    const wateredData = [] as SensorData[];
+    const moistureData = [] as number[];
+    const wateredData = [] as number[];
     const dateData = [] as string[];
 
     // Add the sensor data to the arrays
     sensorData.forEach((sensor) => {
-      sensor.data.moisture > 550 ?
-        moistureData.push(sensor.data.moisture) :
+      sensor.data.moisture as number > 550 ?
+        moistureData.push(sensor.data.moisture as number) :
         moistureData.push(550);
-      wateredData.push(sensor.data.watered);
+      wateredData.push(sensor.data.watered as number);
       dateData.push(formatDate(sensor.date));
     });
 
