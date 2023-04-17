@@ -9,7 +9,7 @@ bot;
 function formatDate(date: Date) {
   // increase 2 hours to the date
   let auxDate = new Date(date);
-  auxDate.setHours(auxDate.getHours() + 2);
+  // auxDate.setHours(auxDate.getHours() + 2);
   const year = auxDate.getFullYear();
   const month = auxDate.getMonth() + 1 < 10 ? `0${auxDate.getMonth() + 1}` : auxDate.getMonth() + 1;
   const day = auxDate.getDate() < 10 ? `0${auxDate.getDate()}` : auxDate.getDate();
