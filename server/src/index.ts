@@ -132,6 +132,9 @@ app.get('/', async (req, res) => {
     // Get all the sensor data from the database
     const sensorData = await SensorModel.find().sort('-date');
 
+    // Get all events data from the database
+    const eventData = await EventModel.find().sort('-createdAt');
+
     // Create arrays to hold the sensor data
     const moistureData = [] as number[];
     const wateredData = [] as number[];
@@ -154,6 +157,8 @@ app.get('/', async (req, res) => {
           <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
           <script src="https://code.jquery.com/jquery-3.6.4.slim.min.js"></script>
           <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.css" />
+          <!-- Font Awesome CDN -->
+          <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
           <script src="//cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
           <style>
             body {
@@ -264,9 +269,24 @@ app.get('/', async (req, res) => {
                 <td>${formatDate(sensor.date)}</td>
               </tr>`).join('')} </tbody>
           </table>
+          <table id="eventsTable">
+            <thead>
+              <tr>
+                <th></th>
+                <th>Comment</th>
+                <th>Date</th>
+              </tr>
+            </thead>
+            <tbody>${eventData.map((event) => ` <tr>
+                <td>${event.eventType === 'water' ? '<i class="fas fa-tint"></i>' : event.eventType === 'battery' ? '<i class="fas fa-battery-full"></i>' : '<i class="fas fa-laptop"></i>'}</td>
+                <td>${event.comment}</td>
+                <td>${formatDate(event.createdAt)}</td>
+              </tr>`).join('')} </tbody>
+          </table>
           <script>
             $(document).ready(function() {
               $('#sensorTable').DataTable();
+              $('#eventsTable').DataTable();
             });
           </script>
         </body>
