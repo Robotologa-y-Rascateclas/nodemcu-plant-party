@@ -67,7 +67,7 @@ const eventSchema = new mongoose.Schema({
   eventType: {
     type: String,
     required: true,
-    enum: ['water', 'battery', 'deepSleepTime'],
+    enum: ['water', 'battery', 'deepSleep'],
   },
   comment: {
     type: String,
