@@ -38,6 +38,7 @@ And a table with the events sent from the telegram bot, to note what you did, li
   * DRY
   * WET
   * SENSOR_PIN
+  * NUM_MEASURES
   * RELAY_PIN
   * DELAY_MEASURE_TIME
   * DELAY_DEEPSLEEP_TIME

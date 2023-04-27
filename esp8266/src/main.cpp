@@ -42,12 +42,12 @@ void getTime() {
  */
 int getSensorValue(int sensorPin) {
   int sensorValue = 0;
-  for (int i = 0; i < 5; i++) {
+  for (int i = 0; i < NUM_MEASURES; i++) {
     sensorValue += analogRead(sensorPin);
     delay(500);
   }
 
-  sensorValue = sensorValue / 5;
+  sensorValue = sensorValue / NUM_MEASURES;
   Serial.println(sensorValue);
   return sensorValue;
 }
