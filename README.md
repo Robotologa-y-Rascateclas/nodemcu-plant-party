@@ -9,15 +9,15 @@ It will also send the data to a server and display it in a web page.
 
 You will see a graph with the moisture of the plant
 
-<img width="454" alt="image" src="https://user-images.githubusercontent.com/709594/232586156-a4d7568a-d6dc-4833-8052-ea80c0cc1ed8.png">
+<img width="600" alt="image" src="https://user-images.githubusercontent.com/709594/235131310-063c0790-97c1-4e50-b008-6ed17378c3c9.png">
 
 A table with the sensor data sent
 
-<img width="476" alt="image" src="https://user-images.githubusercontent.com/709594/232586280-2d8a2815-c675-48e9-9ae7-ff0f2ec3878a.png">
+<img width="600" alt="image" src="https://user-images.githubusercontent.com/709594/232586280-2d8a2815-c675-48e9-9ae7-ff0f2ec3878a.png">
 
 And a table with the events sent from the telegram bot, to note what you did, like changing deepSleep time, changing the battery or watering the plant
 
-<img width="479" alt="image" src="https://user-images.githubusercontent.com/709594/232586758-4770dcd7-c05d-4d11-9a6a-41409981c88f.png">
+<img width="600" alt="image" src="https://user-images.githubusercontent.com/709594/232586758-4770dcd7-c05d-4d11-9a6a-41409981c88f.png">
 
 ## Hardware
 
