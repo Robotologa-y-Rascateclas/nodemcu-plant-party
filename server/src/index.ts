@@ -118,6 +118,13 @@ app.post('/send-event', async (req, res) => {
     }
     await EventModel.create({ eventType, comment });
 
+    if (eventType === 'water') {
+      const lastSensorData = await SensorModel.findOne().sort('-date');
+      if (lastSensorData) {
+        lastSensorData.data.watered = lastSensorData.data.moisture;
+        await lastSensorData.save();
+      }
+    }
     // Send a response
     res.status(200).send('Event saved successfully');
   } catch (err) {
