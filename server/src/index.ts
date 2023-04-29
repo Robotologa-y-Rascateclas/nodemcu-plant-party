@@ -234,9 +234,14 @@ app.get('/', async (req, res) => {
             var watering = {
                 x: dateData,
                 y: wateredData,
-                mode: 'markers',
+                mode: 'lines+markers',
                 type: 'scatter',
                 name: 'Watered',
+                line: {
+                  width: 1,
+                  dash: 'dot',
+                  shape: 'spline'
+                },
                 marker: {
                   size: 10,
                   symbol: 'star'
