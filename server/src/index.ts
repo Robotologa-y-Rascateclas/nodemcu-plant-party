@@ -121,7 +121,10 @@ app.post('/send-event', async (req, res) => {
     if (eventType === 'water') {
       const lastSensorData = await SensorModel.findOne().sort('-date');
       if (lastSensorData) {
-        lastSensorData.data.watered = lastSensorData.data.moisture;
+        lastSensorData.data = {
+          ...lastSensorData.data,
+          watered: lastSensorData.data.moisture,
+        };
         await lastSensorData.save();
       }
     }
