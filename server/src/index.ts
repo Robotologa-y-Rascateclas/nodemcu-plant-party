@@ -140,7 +140,9 @@ app.post('/send-event', async (req, res) => {
 app.get('/', async (req, res) => {
   try {
     // Get all the sensor data from the database
-    const sensorData = await SensorModel.find().sort('-date');
+    const lastWeek = new Date();
+    lastWeek.setDate(lastWeek.getDate() - 7); // get the date from a week ago
+    const sensorData = await SensorModel.find({ date: { $gte: lastWeek } }).sort('-date');
 
     // Get all events data from the database
     const eventData = await EventModel.find().sort('-createdAt');
