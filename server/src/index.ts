@@ -247,7 +247,7 @@ app.get('/', async (req, res) => {
 
             var layout = {
               shapes: [
-                {
+                /*{
                   type: 'line',
                   xref: 'paper',
                   x0: 0,
@@ -259,7 +259,7 @@ app.get('/', async (req, res) => {
                     width: 1,
                     dash:'dot'
                   }
-                }
+                }*/
               ],
               paper_bgcolor: 'rgba(0,0,0,0)'
             };
