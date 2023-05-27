@@ -96,16 +96,19 @@ app.use(bodyParser.json());
 // Define the route to receive sensor data
 app.post('/send-data', async (req, res) => {
   try {
-    // Save the sensor data to the database
-    const { sensor, data } = req.body;
+    // Save the sensors data in the database
+    const sensorDataArray = req.body;
     const date = new Date();
-    await SensorModel.create({ sensor, date, data });
+    for (const sensorData of sensorDataArray) {
+      const { sensor, data } = sensorData;
+      await SensorModel.create({ sensor, date, data });
+    }
 
     // Send a response
-    res.status(200).send('Sensor data received');
+    res.status(200).send('Sensors data received');
   } catch (err) {
     console.error(err);
-    res.status(500).send('Error saving sensor data');
+    res.status(500).send('Error saving sensors data');
   }
 });
 
