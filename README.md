@@ -66,3 +66,7 @@ And a table with the events sent from the telegram bot, to note what you did, li
     * `?name=name-of-the-sensor&from=2022-01-01&to=2022-12-31&limit=10&sort=asc....`
 * To push data to the server, you can use the following command:
   * `curl -X POST -H "Content-Type: application/json" -d '{"sensor": "sensor-name", "data": {"moisture": 22}}' http://localhost:3000/send-data`
+
+## Diagrams
+
+![image](https://github.com/Robotologa-y-Rascateclas/nodemcu-plant-party/assets/709594/91287d70-88bc-44a3-bdb5-a242cf68ec3b)
