@@ -32,4 +32,4 @@ esp8266/.vscode/c_cpp_properties.json
 esp8266/.vscode/launch.json
 esp8266/.vscode/ipch
 
-esp8266/src/configNet.h
+// esp8266/src/configNet.h
