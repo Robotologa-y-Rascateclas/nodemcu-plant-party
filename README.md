@@ -21,7 +21,10 @@ And a table with the events sent from the telegram bot, to note what you did, li
 
 It will also send a message to a telegram bot with the moisture information
 
-And lastly, it will send the data to an InfluxDB database, so you can use Chronograf and/or Grafana to display the data
+And lastly, it will send the data to an InfluxDB database, so you can use Influx UI, Chronograf and/or Grafana to display the data:
+
+![image](https://github.com/Robotologa-y-Rascateclas/nodemcu-plant-party/assets/709594/02ce1e9b-3495-42cd-829c-bc434c758adf)
+
 
 ## Hardware
 
