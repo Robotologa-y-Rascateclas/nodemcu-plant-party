@@ -5,6 +5,8 @@ import bot from './telegramBot';
 
 bot;
 
+const TELEGRAM_CHAT_ID = process.env.TELEGRAM_CHAT_ID as string;
+
 // function to show the sensor date on the web page as YYYY-MM-DD HH:MM:SS
 function formatDate(date: Date) {
   // increase 2 hours to the date
@@ -136,6 +138,19 @@ app.post('/send-event', async (req, res) => {
   } catch (err) {
     console.error(err);
     res.status(500).send('Error saving event');
+  }
+});
+
+app.post('/alerts', async (req, res) => {
+  try {
+    const { message } = req.query as { message: string };
+    if (!message) {
+      return res.status(400).send('Missing required fields');
+    } else {
+      bot.sendMessage(TELEGRAM_CHAT_ID, message);
+    }
+  } catch (e) {
+    console.error(e);
   }
 });
 

@@ -81,17 +81,23 @@ And lastly, it will send the data to an InfluxDB database, so you can use Chrono
 * To push data to the server, you can use the following command:
   * `curl -X POST -H "Content-Type: application/json" -d '{"sensor": "sensor-name", "data": {"moisture": 22}}' http://localhost:3000/send-data`
 
-## How to configure InfluxDB and Chronograf
+## How to configure InfluxDB
 
 * Go to http://localhost:8086/
-* Create a new user and password, and put `plant_bucket` as the default bucket
+* Create a new user and password, and put `plant_bucket` as the default bucket.
+* Go to Dashboards
+* Click on Create Dashboard -> Import Dashboard, and import the file `dashboards/INFLUX_UI_PLANT_PARTY.json`
+* Go to the dashboard and you will see the data
+
+## How to configure Chronograf
+
 * Go to http://localhost:8888/
 * Go to configuration and edit the current influxdb config
   + Enable InfluxDB v2 Auth
   + Put the organization id and token that you got in InfluxDB site
   + Update the Connection
 * Go to Dashboards
-* Click on import dashboard, and import the file `dashboards/PLANT PARTY.json`
+* Click on import dashboard, and import the file `dashboards/CHRONOGRAF_PLANT_PARTY.json`
 * Go to the dashboard and you will see the data
 
 ## Diagrams
