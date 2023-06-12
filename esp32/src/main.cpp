@@ -89,6 +89,11 @@ void loop() {
   // Serial.println(payload);
 
   esp_sleep_enable_timer_wakeup(DELAY_DEEPSLEEP_TIME);
+
+  esp_sleep_pd_config(ESP_PD_DOMAIN_MAX, ESP_PD_OPTION_OFF);
+  esp_sleep_pd_config(ESP_PD_DOMAIN_RTC_PERIPH, ESP_PD_OPTION_OFF);
+  esp_sleep_pd_config(ESP_PD_DOMAIN_RTC_SLOW_MEM, ESP_PD_OPTION_OFF);
+  esp_sleep_pd_config(ESP_PD_DOMAIN_RTC_FAST_MEM, ESP_PD_OPTION_OFF);
   esp_deep_sleep_start();
 
   // Wait for some time before sending the next data
