@@ -1,6 +1,7 @@
 import express from 'express';
 import bodyParser from 'body-parser';
 import mongoose, { ConnectOptions } from 'mongoose';
+import path from 'path';
 import bot from './telegramBot';
 
 bot;
@@ -152,6 +153,13 @@ app.post('/alerts', async (req, res) => {
   } catch (e) {
     console.error(e);
   }
+});
+
+// Try to make some magic to serve the React app
+const reactSitePath = path.join(__dirname, '../site');
+app.use(express.static(reactSitePath));
+app.get('/react', async (req, res) => {
+  res.sendFile(path.join(reactSitePath, 'index.html'));
 });
 
 // Define the route to display sensor data

@@ -5,7 +5,7 @@ FROM mongo:4.4
 ENV MONGO_INITDB_DATABASE sensors
 
 # Copy the initialization script
-COPY init-mongo.js /docker-entrypoint-initdb.d/
+COPY server/init-mongo.js /docker-entrypoint-initdb.d/
 
 # Set timezone to Europe/Madrid
 ENV TZ=Europe/Madrid

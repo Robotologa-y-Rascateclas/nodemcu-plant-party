@@ -13,6 +13,7 @@ dist
 # production
 /build
 /dist
+/site
 
 # misc
 .DS_Store
