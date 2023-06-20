@@ -1,11 +1,16 @@
 import express from 'express';
 import bodyParser from 'body-parser';
 import mongoose, { ConnectOptions } from 'mongoose';
+const {InfluxDB, Point} = require('@influxdata/influxdb-client')
 import bot from './telegramBot';
 
 bot;
 
 const TELEGRAM_CHAT_ID = process.env.TELEGRAM_CHAT_ID as string;
+const INFLUXDB_URL = process.env.INFLUXDB_URL as string;
+const INFLUXDB_TOKEN = process.env.INFLUXDB_TOKEN as string;
+const INFLUXDB_ORG = process.env.INFLUXDB_ORG as string;
+const INFLUXDB_BUCKET = process.env.INFLUXDB_BUCKET as string;
 
 // function to show the sensor date on the web page as YYYY-MM-DD HH:MM:SS
 function formatDate(date: Date) {
@@ -89,27 +94,51 @@ mongoose.connect('mongodb://mongodb:27017/sensors', {
   useUnifiedTopology: true,
 } as ConnectOptions);
 
+// Create a new InfluxDB client instance
+const influxClient = new InfluxDB({
+  url: INFLUXDB_URL,
+  token: INFLUXDB_TOKEN,
+}).getWriteApi(INFLUXDB_ORG, INFLUXDB_BUCKET, 'ns');
+
 // Create the Express app
 const app = express();
 
 // Use body-parser middleware to parse JSON request bodies
 app.use(bodyParser.json());
 
-// Define the route to receive sensor data
+// Define the route to receive the sensors data
 app.post('/send-data', async (req, res) => {
   try {
-    // Save the sensors data in the database
     const sensorDataArray = req.body;
     const date = new Date();
+    let telegramMessage = 'Sensors data measured: ';
     for (const sensorData of sensorDataArray) {
       const { sensor, data } = sensorData;
+
+      // Save influx points in influxdb
+      let point = new Point('sensors_data')
+        .tag('device', 'ESP32')
+        .tag('sensor', sensor)
+        .intField('moisture', data.moisture);
+      await influxClient.writePoint(point);
+
+      // Save sensor data in MongoDB
       await SensorModel.create({ sensor, date, data });
+
+      // Add sensor data to telegramMessage
+      telegramMessage += `${data.moisture}, `;
     }
+
+    // remove last two characters from telegramMessage
+    telegramMessage = telegramMessage.slice(0, -2);
+
+    // Send message to telegram
+    bot.sendMessage(TELEGRAM_CHAT_ID, telegramMessage);
 
     // Send a response
     res.status(200).send('Sensors data received');
-  } catch (err) {
-    console.error(err);
+  } catch (e) {
+    console.error(e);
     res.status(500).send('Error saving sensors data');
   }
 });

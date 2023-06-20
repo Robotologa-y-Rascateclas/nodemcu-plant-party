@@ -13,9 +13,6 @@ void setup() {
 
   // Connect to Wi-Fi
   initWifi();
-
-  // Init bot
-  bot_setup();
 }
 
 void getTime() {
@@ -59,23 +56,6 @@ void loop() {
   // float moisture = map(sensorValue, 1023, 0, 0, 100) / 100.0;
 
   // Send sensors data to nodejs server by WiFi
-  sendSensorData(
-    sensor1value,
-    sensor2value,
-    sensor3value,
-    sensor4value,
-    sensor5value
-  );
-
-  sendBotMessage(
-    sensor1value,
-    sensor2value,
-    sensor3value,
-    sensor4value,
-    sensor5value
-  );
-
-  // Send sensors data to InfluxDB
   std::vector<int> sensorValues = {
     sensor1value,
     sensor2value,
@@ -83,13 +63,10 @@ void loop() {
     sensor4value,
     sensor5value
   };
-  sendSensorDataToInfluxDB(sensorValues);
+  sendSensorData(sensorValues);
 
-  // Print payload in serial
-  // Serial.println(payload);
-
+  // Hybernate for some time
   esp_sleep_enable_timer_wakeup(DELAY_DEEPSLEEP_TIME);
-
   esp_sleep_pd_config(ESP_PD_DOMAIN_MAX, ESP_PD_OPTION_OFF);
   esp_sleep_pd_config(ESP_PD_DOMAIN_RTC_PERIPH, ESP_PD_OPTION_OFF);
   esp_sleep_pd_config(ESP_PD_DOMAIN_RTC_SLOW_MEM, ESP_PD_OPTION_OFF);
@@ -97,5 +74,5 @@ void loop() {
   esp_deep_sleep_start();
 
   // Wait for some time before sending the next data
-  // delay(500);
+  // delay(900000); // 15 minutes
 }
