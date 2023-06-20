@@ -60,12 +60,6 @@ And lastly, it will send the data to an InfluxDB database, so you can use Influx
   * WIFI_SSID
   * WIFI_PASSWORD
   * SERVER_URL
-  * BOT_TOKEN
-  * CHAT_ID
-  * INFLUXDB_URL
-  * INFLUXDB_TOKEN
-  * INFLUXDB_ORG
-  * INFLUXDB_BUCKET
 
 * Upload the code to the NodeMCU
 
